@@ -63,14 +63,14 @@ app.put('/users/:id', function (req, res) {
 app.delete('/users/:id', function (req, res) {
     //delete user
     let temp = data.users.indexOf(getRow(req.params.id));
-    console.log(req.params.id);
+    //console.log(req.params.id);
     if (temp != -1) {
         data.users.splice(temp, 1);
         res.write('deleted ' + temp);
     } else {
         res.write('item Not Found');
     }
-    console.log(data);
+    //console.log(data);
     res.send();
 });
 app.listen(3000);

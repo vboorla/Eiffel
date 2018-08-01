@@ -112,13 +112,6 @@ active {
     cursor: pointer;
 }
 
-.editBtn {
-    width: 100px;
-    text-align: center;
-    border: 1px solid black;
-    padding: 5px;
-    display: none;
-}
 
 .viewLink a {
     height: 18px;

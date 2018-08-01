@@ -24,7 +24,7 @@ var myChart = new Chart(ctx, {
         datasets: datasets
     }
 });
-computeEiffel();
+
 
 function computeEiffel() {
     steepness = steepnessInput.value;
@@ -39,7 +39,7 @@ function computeEiffel() {
 
 $(document).ready(function () {
     buildPage();
-
+    computeEiffel();
 })
 
 function buildPage() {
@@ -64,6 +64,35 @@ function buildPage() {
         })
     })
 }
+
+$('.btn').click(function () {
+    var user = $('input[name="user"]').val();
+    var monday = $('input[name="monday"]').val();
+    var tuesday = $('input[name="tuesday"]').val();
+    var wednesday = $('input[name="wednesday"]').val();
+    var thursday = $('input[name="thursday"]').val();
+    var friday = $('input[name="friday"]').val();
+    var saturday = $('input[name="saturday"]').val();
+    var sunday = $('input[name="sunday"]').val();
+    $.post('/users', $('#myform').serialize()).done(function (data) {
+        console.log(data);
+        buildPage();
+    })
+})
+$('#usersList').on('click', '.edit', function () {
+    var data = $(this).parent().find('input').serialize();
+    var id = $(this).parent().find('input[name="id"]').val();
+    $.ajax({
+        url: '/users/' + id,
+        type: 'PUT',
+        data: data,
+        success: function (rep) {
+            console.log(rep);
+            buildPage();
+        }
+    })
+
+})
 
 $('#usersList').on('click', '.graph', function () {
     var data = $(this).parent().find('input').serialize();
@@ -96,14 +125,31 @@ $('#usersList').on('click', '.graph', function () {
                     (p === 0) ? '' : userSteps.push(p);
                 }
             });
-
             userDataset.data = userSteps;
-
             // console.log(datasets);
             myChart.update();
         }
     })
 
+})
+
+$('#usersList').on('click', '.remove', function () {
+    var id = $(this).parent().data('user').id;
+    var user = $(this).parent().find('input[name="user"]').val();
+    //console.log(user);
+    $.ajax({
+        url: '/users/' + id,
+        type: 'DELETE',
+        success: function (res) {
+            console.log(res);
+            let temp = datasets.indexOf(getUser(user));
+            if (temp != -1) {
+                datasets.splice(temp, 1);
+                computeEiffel();
+            }
+            buildPage();
+        }
+    })
 })
 
 function getUser(label) {
