@@ -1,0 +1,126 @@
+body {
+    font-family: Helvetica Neue, Arial, sans-serif;
+    text-align: center;
+    overflow: auto;
+
+}
+
+.wrapper {
+    max-width: 800px;
+    margin: 50px auto;
+}
+
+h1 {
+    font-weight: 200;
+    font-size: 3em;
+    margin: 0 0 0.1em 0;
+}
+
+h2 {
+    font-weight: 200;
+    font-size: 0.9em;
+    margin: 0 0 50px;
+    color: #999;
+}
+
+p {
+    font-weight: 200;
+    font-size: 0.9em;
+    margin: 0 0 50px;
+    color: #333;
+}
+
+a {
+    margin-top: 50px;
+    display: block;
+    color: #3e95cd;
+}
+
+.btn {
+    margin-top: 10px;
+    border: 1px solid black;
+    padding: 0 6px;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    font-size: 1.3em;
+    display: inline-block;
+
+}
+
+.btn:hover,
+active {
+    background-color: #ffbb00;
+    cursor: pointer;
+}
+
+.hide {
+    display: none
+}
+
+
+.steps {
+    width: 100px;
+}
+
+#myForm {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: aliceblue;
+}
+
+#myform input {
+    width: 10%;
+    height: 38px;
+    font-size: 1.5em;
+    vertical-align: top;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    margin: 0 3px 3px 3px;
+    padding: 0.5em;
+    font-size: 1.2em;
+    height: 40px;
+}
+
+li input {
+    width: 9%;
+    height: 38px;
+    font-size: 1.5em;
+    vertical-align: top;
+}
+
+li span {
+    font-size: 1.3em;
+    border: 1px solid black;
+    padding: 0 6px;
+    width: 60px;
+    display: inline-block;
+    height: 41px;
+
+}
+
+li span:hover,
+active {
+    background-color: #ffbb00;
+    cursor: pointer;
+}
+
+.editBtn {
+    width: 100px;
+    text-align: center;
+    border: 1px solid black;
+    padding: 5px;
+    display: none;
+}
+
+.viewLink a {
+    height: 18px;
+    margin-top: 0;
+}

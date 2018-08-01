@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Eiffel tower workout</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>Your eiffel tower steps</h1>
+        <h2>Maxima on Thursday</h2>
+        <p>Steepnes constant <input id="steepness" type="number" value="1.5" /></p>
+        <input id="maxSteps" type="number" value="15000" />
+        <input id="generate" type="button" value="Generate" onclick="computeEiffel()" />
+        <canvas id="myChart" width="800" height="800" backgroundColor="#CC7722"></canvas>
+    </div>
+    <ul id="usersList"></ul>
+    <form id="myform">
+        <input type="text" name="user" placeholder="User Name">
+        <input type="number" class="day" name="monday" placeholder="0">
+        <input type="number" class="day" name="tuesday" placeholder="0">
+        <input type="number" class="day" name="wednesday" placeholder="0">
+        <input type="number" class="day" name="thursday" placeholder="0">
+        <input type="number" class="day" name="friday" placeholder="0">
+        <input type="number" class="day" name="saturday" placeholder="0">
+        <input type="number" class="day" name="sunday" placeholder="0">
+    </form>
+    <div class="btn">Add User</div>
+
+
+    <script src="script.js"></script>
+    <script>
+        $('#usersList').on('click', '.remove', function() {
+            var id = $(this).parent().data('user').id;
+            $.ajax({
+                url: '/users/' + id,
+                type: 'DELETE',
+                success: function(rep) {
+                    console.log(rep);
+                    buildPage();
+                }
+            })
+        })
+        $('#usersList').on('click', '.edit', function() {
+            var data = $(this).parent().find('input').serialize();
+            var id = $(this).parent().find('input[name="id"]').val();
+            $.ajax({
+                url: '/users/' + id,
+                type: 'PUT',
+                data: data,
+                success: function(rep) {
+                    console.log(rep);
+                    buildPage();
+                }
+            })
+
+        })
+        $('.btn').click(function() {
+            var user = $('input[name="user"]').val();
+            var monday = $('input[name="monday"]').val();
+            var tuesday = $('input[name="tuesday"]').val();
+            var wednesday = $('input[name="wednesday"]').val();
+            var thursday = $('input[name="thursday"]').val();
+            var friday = $('input[name="friday"]').val();
+            var saturday = $('input[name="saturday"]').val();
+            var sunday = $('input[name="sunday"]').val();
+            $.post('/users', $('#myform').serialize()).done(function(data) {
+                console.log(data);
+                buildPage();
+            })
+        })
+
+    </script>
+</body>
+
+</html>
