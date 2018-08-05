@@ -1,30 +1,14 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const data = {
-    "users": [{
-            user: "harish",
-            monday: 0,
-            tuesday: 0,
-            wednesday: 0,
-            thursday: 0,
-            friday: 0,
-            saturday: 0,
-            sunday: 0,
-            id: 1
-        }, {
-            user: "vishnu",
-            monday: 0,
-            tuesday: 0,
-            wednesday: 0,
-            thursday: 0,
-            friday: 0,
-            saturday: 0,
-            sunday: 0,
-            id: 2
-        }
-     ]
-}
+
+const sqlite3 = require('sqlite3').verbose();
+let db = new sqlite3.Database('stepsdb', sqlite3.OPEN_READWRITE, (err) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log('Connected to the database.');
+});
 
 //console.log(__dirname);
 app.use(bodyParser.urlencoded({
@@ -32,46 +16,39 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
+
 app.get('/users', function (req, res) {
     //see all users
-    res.json(data);
+    db.all("SELECT * FROM users",function(err,rows){
+        res.json(rows);
+    }) 
 });
 app.post('/users', function (req, res) {
     //create add user
-    req.body.id = Math.floor(Date.now());
-    data.users.push(req.body);
-    /*console.log(req.body);
-    console.log(data);  */
-    res.send("POST Sent");
+    db.run("INSERT INTO users(user,monday,tuesday,wednesday,thursday,friday,saturday,sunday) VALUES('"+req.body.user+"','"+req.body.monday+"','"+req.body.tuesday+"','"+req.body.wednesday+"','"+req.body.thursday+"','"+req.body.friday+"','"+req.body.saturday+"','"+req.body.sunday+"')",function(err){
+        console.log(err);
+        res.json({id:this.lastID});    
+    })
 });
 app.get('/users/:id', function (req, res) {
     //get user info by ID    
-    res.send(getRow(req.params.id));
+     db.all("SELECT * FROM users WHERE id="+req.params.id,function(err,rows){
+        res.json(rows);
+    })
 });
 app.put('/users/:id', function (req, res) {
     //uupdate user
-    req.body.id = req.params.id;
-    let temp = data.users.indexOf(getRow(req.params.id));
-    if (temp != -1) {
-        data.users[temp] = req.body
-        res.write('updated ' + temp)
-    } else {
-        res.write('not found');
-    }
-    res.send();
+    db.run("UPDATE users SET user='"+req.body.user+"', monday='"+req.body.monday+"' , tuesday='"+req.body.tuesday+"', wednesday='"+req.body.wednesday+"', thursday='"+req.body.thursday+"', friday='"+req.body.friday+"', saturday='"+req.body.saturday+"', sunday='"+req.body.sunday+"' WHERE id="+req.params.id,function(err){
+        console.log(err);
+        res.json({status:this.changes});    
+    })
 });
 app.delete('/users/:id', function (req, res) {
     //delete user
-    let temp = data.users.indexOf(getRow(req.params.id));
-    //console.log(req.params.id);
-    if (temp != -1) {
-        data.users.splice(temp, 1);
-        res.write('deleted ' + temp);
-    } else {
-        res.write('item Not Found');
-    }
-    //console.log(data);
-    res.send();
+    db.run("DELETE FROM users WHERE id="+req.params.id,function(err){
+        console.log(err);
+        res.json({status:this.changes});    
+    })
 });
 app.listen(3000);
 

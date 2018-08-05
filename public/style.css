@@ -103,6 +103,8 @@ li span {
     width: 60px;
     display: inline-block;
     height: 41px;
+    align-items: center;
+    text-align: center;
 
 }
 

@@ -11,7 +11,7 @@ var steepness = steepnessInput.value;
 var datasets = [
     {
         label: "Step count",
-        backgroundColor: 'rgba(255, 255, 255, 0.01)',
+        backgroundColor: '#ffbb00',
         borderColor: '#2196F3',
         data: steps
       }
@@ -45,8 +45,8 @@ $(document).ready(function () {
 function buildPage() {
     $('#usersList').html(' ');
     $.getJSON('/users', function (data) {
-
-        $.each(data.users, function (i, value) {
+        console.log(data);
+        $.each(data, function (i, value) {
             var el = '<li><input type="text" name="user" value="' + value.user + '">';
             el += '<input type="number" class="day" name="monday" value="' + value.monday + '">';
             el += '<input type="number" class="day" name="tuesday" value="' + value.tuesday + '">';
@@ -74,8 +74,9 @@ $('.btn').click(function () {
     var friday = $('input[name="friday"]').val();
     var saturday = $('input[name="saturday"]').val();
     var sunday = $('input[name="sunday"]').val();
+    console.log($('#myform').serialize());
     $.post('/users', $('#myform').serialize()).done(function (data) {
-        console.log(data);
+        //console.log(data);
         buildPage();
     })
 })
@@ -87,7 +88,7 @@ $('#usersList').on('click', '.edit', function () {
         type: 'PUT',
         data: data,
         success: function (rep) {
-            console.log(rep);
+           // console.log(rep);
             buildPage();
         }
     })
@@ -102,23 +103,23 @@ $('#usersList').on('click', '.graph', function () {
         type: 'GET',
         data: data,
         success: function (res) {
-            //console.log(res);
+            //console.log(res[0]);
             let userDataset = {};
             let userSteps = [];
-
-            let temp = datasets.indexOf(getUser(res.user));
+            
+            let temp = datasets.indexOf(getUser(res[0].user));
             if (temp == -1) {
-                userDataset.label = res.user;
+                userDataset.label = res[0].user;
                 userDataset.backgroundColor = 'rgba(255, 255, 255, 0.01)';
                 userDataset.borderColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
                 datasets.push(userDataset);
             } else {
                 //console.log(getUser(res.user));
-                userDataset = getUser(res.user);
+                userDataset = getUser(res[0].user);
                 datasets.splice(temp, 1);
                 datasets.push(userDataset);
             }
-            $.each(res, function (key, value) {
+            $.each(res[0], function (key, value) {
                 if (key != 'id' && key !== 'user') {
                     let p = parseInt(value);
                     //isNaN(p) ? console.log(userSteps) : userSteps.push(p);
@@ -141,7 +142,7 @@ $('#usersList').on('click', '.remove', function () {
         url: '/users/' + id,
         type: 'DELETE',
         success: function (res) {
-            console.log(res);
+            //console.log(res);
             let temp = datasets.indexOf(getUser(user));
             if (temp != -1) {
                 datasets.splice(temp, 1);
