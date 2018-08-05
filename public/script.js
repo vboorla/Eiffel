@@ -11,7 +11,7 @@ var steepness = steepnessInput.value;
 var datasets = [
     {
         label: "Step count",
-        backgroundColor: '#ffbb00',
+        backgroundColor: 'rgba(255, 255, 255, 0.01)',
         borderColor: '#2196F3',
         data: steps
       }
@@ -152,7 +152,7 @@ $('#usersList').on('click', '.remove', function () {
         }
     })
 })
-
+//this function returns the object with label within a array of user objects.
 function getUser(label) {
     for (let item of datasets) {
         //console.log(item);

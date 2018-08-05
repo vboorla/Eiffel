@@ -52,7 +52,7 @@ app.delete('/users/:id', function (req, res) {
 });
 app.listen(3000);
 
-
+//this function returns the object of index id within a array of objects.
 function getRow(id) {
     for (let item of data.users) {
         if (item.id == id) return item;
